@@ -1,4 +1,4 @@
-package main
+package DayOne
 
 import (
 	"encoding/csv"
@@ -11,7 +11,7 @@ import (
 )
 
 func readCsvFile(filePath string) [][]string {
-	f, err := os.Open("data.csv")
+	f, err := os.Open("./DayOne/data.csv")
 	if err != nil {
 		log.Fatal("Unable to read input file " + filePath)
 	}
@@ -67,6 +67,36 @@ func findDistanceBetweenTwoSortedLists(listOne []int, listTwo []int, total int) 
 	return findDistanceBetweenTwoSortedLists(listOne[1:], listTwo[1:], total)
 }
 
+func findFrequencyOfNumberInList(number int, list []int, total int) int {
+	if len(list) == 0 {
+		return total
+	}
+
+	if list[0] == number {
+		total++
+	}
+	return findFrequencyOfNumberInList(number, list[1:], total)
+}
+
+func findFrequencyInList(listOne []int, listTwo []int, total int, cacheMemory map[int]int) int {
+
+	if len(listOne) == 0 {
+		return total
+	}
+
+	val, ok := cacheMemory[listOne[0]]
+	if ok {
+		total += val
+	} else {
+		var frequency = findFrequencyOfNumberInList(listOne[0], listTwo, 0)
+		var sum = listOne[0] * frequency
+		cacheMemory[listOne[0]] = sum
+		total += sum
+	}
+	return findFrequencyInList(listOne[1:], listTwo, total, cacheMemory)
+
+}
+
 func abs(x int) int {
 	if x < 0 {
 		return -x
@@ -74,11 +104,13 @@ func abs(x int) int {
 	return x
 }
 
-func main() {
+func DayOne() {
 	records := readCsvFile("data.csv")
 	listOne, listTwo := processInput(records)
 	sort.Ints(listOne)
 	sort.Ints(listTwo)
 	total := findDistanceBetweenTwoSortedLists(listOne, listTwo, 0)
-	fmt.Println(total)
+	frequency := findFrequencyInList(listOne, listTwo, 0, make(map[int]int))
+	fmt.Printf("Part one: " + strconv.Itoa(total) + "\n")
+	fmt.Printf("Part two: " + strconv.Itoa(frequency) + "\n")
 }
