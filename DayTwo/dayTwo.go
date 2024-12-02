@@ -41,55 +41,47 @@ func parseListToListOfNumber(list []string) []int {
 	return result
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
+func isSequenceSafe(row []int) bool {
+	if len(row) < 2 {
+		return true
 	}
-	return x
+
+	isDecreasing := row[1] < row[0]
+
+	for index := 1; index < len(row); index++ {
+		oldValue, value := row[index-1], row[index]
+		if isDecreasing {
+			if value < oldValue-3 || value >= oldValue {
+				return false
+			}
+		} else {
+			if value > oldValue+3 || value <= oldValue {
+				return false
+			}
+		}
+	}
+	return true
 }
 
-func isRowSafe(row []int) (bool, int){
-	var isIncrementing bool
-	var isDecrementing bool
-	var totalUnsafeNumbers = 0;
-	var isRowSafe = true;
+func isRowSafe(row []int) bool {
 
-	for index, value := range row {
-		if index == 0 {
+	if isSequenceSafe(row) {
+		return true
+	}
+
+	for index := 0; index < len(row); index++ {
+		if index > 0 && row[index] == row[index-1] {
 			continue
 		}
 
-		var oldValue = row[index-1]
-		var diff = abs(value - oldValue)
+		modifiedRow := append([]int{}, row[:index]...)
+		modifiedRow = append(modifiedRow, row[index+1:]...)
 
-		if diff < 1 || diff > 3 {
-			totalUnsafeNumbers++
-			isRowSafe = false
-		}
-
-		if value > oldValue {
-			isIncrementing = true
-		}
-
-		if value < oldValue {
-			isDecrementing = true
-		}
-
-		if isIncrementing && isDecrementing {
-			totalUnsafeNumbers++
-			isRowSafe = false
+		if isSequenceSafe(modifiedRow) {
+			return true
 		}
 	}
-
-	return isRowSafe, totalUnsafeNumbers)
-
-}
-
-
-func canElementBeRemovedToMakeRowSafe(row []int) bool {
-	for index, value := range row {
-
-	}
+	return false
 }
 
 func DayTwo() {
@@ -102,14 +94,10 @@ func DayTwo() {
 		recordsInInt = append(recordsInInt, parsedList)
 	}
 
-	var totalSafe = 0
+	totalSafe := 0
 	for _, record := range recordsInInt {
-		isRowSafeBool, totalUnsafeNumbers := isRowSafe(record)
-		if isRowSafeBool {
-			totalSafe++;
-		}
-		if totalUnsafeNumbers == 1 {
-
+		if isRowSafe(record) {
+			totalSafe += 1
 		}
 	}
 	fmt.Printf("Part one: " + strconv.Itoa(totalSafe) + "\n")
