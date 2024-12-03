@@ -1,0 +1,66 @@
+# Binaries for programs and plugins
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Output files
+*.out
+
+# Go modules
+go.mod
+go.sum
+
+# Dependency directories (vendor/)
+vendor/
+
+# Test binary
+*.test
+
+# Go workspace file
+go.work
+go.work.sum
+
+# IDE specific files
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# IDE configuration files
+*.ipr
+*.iws
+
+# JetBrains project files
+/.idea/
+/out/
+/*.iml
+
+# User-specific files
+.idea/modules.xml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+.idea/vcs.xml
+
+# Miscellaneous
+.DS_Store
+*.swp
+*.swo
+*.swn
+*.bak
+*~
+
+# Compiled code
+*.o
+*.a
+*.pyc
+*.pyo
+*.pyd
+
+# Coverage
+coverage.out
+
+# Env files
+.env
