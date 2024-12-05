@@ -1,0 +1,5 @@
+package DayFive
+
+func DayFive() {
+
+}
